@@ -32,10 +32,11 @@ Run the test suite with:
 ## Project Structure
 
 - `content/` - Markdown source files
+- `static/` - CSS, images, and other assets
+- `src/` - Python source code
+- `docs/` (or `public/`) - generated output
 
 ## Known Limitations
 
 - Nested/combined inline markdown (e.g. `**_bold and italic_**`) is not supported. Only single-style inline formatting works correctly (bold, italic, code, links, images).
-- `static/` - CSS, images, and other assets
-- `src/` - Python source code
-- `docs/` (or `public/`) - generated output
+
