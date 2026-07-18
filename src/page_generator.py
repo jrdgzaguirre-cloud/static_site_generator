@@ -1,6 +1,9 @@
 import os
 from block_markdown import *
-from htmlnode import *
+
+
+def normalize_basepath(basepath):
+    return f"/{basepath.strip('/')}" + ("/" if basepath.strip('/') else "")
 
 def extract_title(markdown):
     blocks = markdown_to_blocks(markdown)
@@ -21,18 +24,23 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(text)
     template = template.replace('{{ Title }}', title)
     template = template.replace('{{ Content }}', content)
-    template = template.replace(f'href="/', 'href="{basepath}')
-    template = template.replace(f'src="/', 'src="{basepath}')
+    basepath = normalize_basepath(basepath)
+    template = template.replace('href="/', f'href="{basepath}')
+    template = template.replace('src="/', f'src="{basepath}')
     os.makedirs(os.path.dirname(dest_path), exist_ok = True)
     with open(dest_path, 'w') as f:
-        new_file = f.write(template)
+        f.write(template)
 
 def generate_pages_recursive(from_path, template_path, dest_path, basepath):
-        if os.path.isfile(from_path):
-            html_dest_path = dest_path.replace('.md', '.html')
+    if os.path.isfile(from_path):
+        if from_path.endswith('.md'):
+            html_dest_path = os.path.splitext(dest_path)[0] + '.html'
             generate_page(from_path, template_path, html_dest_path, basepath)
-        else:
-            for item in os.listdir(from_path):
-                new_path = os.path.join(from_path, item)
-                new_dest_path = os.path.join(dest_path, item)
-                generate_pages_recursive(new_path, template_path, new_dest_path, basepath)
+        return
+
+    for item in os.listdir(from_path):
+        if item.startswith('.'):
+            continue
+        new_path = os.path.join(from_path, item)
+        new_dest_path = os.path.join(dest_path, item)
+        generate_pages_recursive(new_path, template_path, new_dest_path, basepath)
