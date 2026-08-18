@@ -95,6 +95,11 @@ class TestNumberBlockToBlockType(unittest.TestCase):
         result = block_to_block_type(block)
         self.assertEqual(result, BlockType.CODE)
 
+    def test_block_to_block_type_code_with_language(self):
+        block = "```python\nprint('hello')\n```"
+        result = block_to_block_type(block)
+        self.assertEqual(result, BlockType.CODE)
+
     def test_block_to_block_type_invalid_code(self):
         block = "````Just some code```"
         result = block_to_block_type(block)
@@ -162,6 +167,19 @@ the **same** even with inline stuff
         html,
         "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
     )
+
+    def test_codeblock_with_language(self):
+        md = """
+```python
+print('hello')
+```
+"""
+
+        node = markdown_to_html_node(md)
+        self.assertEqual(
+            node.to_html(),
+            "<div><pre><code>print('hello')\n</code></pre></div>",
+        )
 
     def test_heading(self):
         md = """

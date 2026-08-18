@@ -15,28 +15,27 @@ A simple static site generator built in Python that converts Markdown files into
 2. Add your Markdown content to the `content` directory
 3. Run the build/dev script:
 
-​```bash
+```bash
 ./main.sh
-​```
+```
 
-4. Open the generated site in your browser
+4. Open http://localhost:8888 in your browser. Stop the server with `Ctrl+C`.
 
 ## Testing
 
 Run the test suite with:
 
-​```bash
+```bash
 ./test.sh
-​```
+```
 
 ## Project Structure
 
 - `content/` - Markdown source files
 - `static/` - CSS, images, and other assets
 - `src/` - Python source code
-- `docs/` (or `public/`) - generated output
+- `docs/` - generated output
 
 ## Known Limitations
 
 - Nested/combined inline markdown (e.g. `**_bold and italic_**`) is not supported. Only single-style inline formatting works correctly (bold, italic, code, links, images).
-

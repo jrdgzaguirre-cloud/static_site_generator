@@ -1,14 +1,13 @@
-from textnode import TextNode, TextType
-from copystatic import *
+from copystatic import destination_creator
 from page_generator import generate_pages_recursive
 import sys
 
+
 def main():
-    if sys.argv[0]:
-        basepath = sys.argv[0]
-    else: 
-        basepath = '/'
-    destination_creator('static', 'docs')#source_path should be initialized as str: "static" and destination_path to "docs"
+    basepath = sys.argv[1] if len(sys.argv) > 1 else '/'
+    destination_creator('static', 'docs')
     generate_pages_recursive('content', 'template.html', 'docs', basepath)
 
-main()
+
+if __name__ == '__main__':
+    main()

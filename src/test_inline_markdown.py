@@ -267,5 +267,15 @@ class TestTextToTextNode(unittest.TestCase):
         nodes = text_to_textnodes(text)
         self.assertListEqual(nodes, [TextNode("This is just a bold sentence", TextType.BOLD)])
 
+    def test_markdown_characters_inside_inline_code(self):
+        nodes = text_to_textnodes("Example: `**_bold and italic_**`")
+        self.assertListEqual(
+            nodes,
+            [
+                TextNode("Example: ", TextType.PLAIN),
+                TextNode("**_bold and italic_**", TextType.CODE),
+            ],
+        )
+
 if __name__ == "__main__":
     unittest.main()

@@ -24,7 +24,8 @@ def block_to_block_type(block) -> BlockType:
     if block.startswith(('# ','## ','### ','#### ','##### ','###### ')):
         return BlockType.HEADING
     
-    if block[0:4] == '```\n' and block[-3:] == '```' :
+    first_line = lines[0]
+    if first_line.startswith('```') and '```' not in first_line[3:] and block.endswith('```'):
         return BlockType.CODE
     
     is_quote = True
@@ -77,9 +78,9 @@ def block_node_to_html_node(block, block_type: BlockType) -> LeafNode:
                 counter += 1
             return ParentNode(tag = 'blockquote', children = children)
         elif block_type == BlockType.CODE:
-            block = block.removeprefix('```\n')
-            block = block.removesuffix('```')
-            return ParentNode(tag = 'pre', children = [text_node_to_html_node(TextNode(block, TextType.CODE))])
+            _, code = block.split('\n', 1)
+            code = code.removesuffix('```')
+            return ParentNode(tag = 'pre', children = [text_node_to_html_node(TextNode(code, TextType.CODE))])
         elif block_type == BlockType.UNORDERED_LIST:
             children = []
             counter = 0
@@ -134,5 +135,4 @@ def markdown_to_html_node(markdown):
         children.append(child)
     parent = ParentNode('div', children)
     return parent
-
 
